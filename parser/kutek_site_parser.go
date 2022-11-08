@@ -43,9 +43,18 @@ func (k *KutekSiteParser) Run() {
 
 					name := desc.Find("h1").First().Text()
 					article := desc.Find("h2").First().Text()
-					height := desc.Find("ul > li").Eq(0).Text()
-					width := desc.Find("ul > li").Eq(1).Text()
-					lamp := desc.Find("ul > li").Eq(2).Text()
+					li := desc.Find("ul > li")
+					height := li.Eq(0).Text()
+					width := li.Eq(1).Text()
+
+					var lamp, distance string
+					if li.Length() > 3 {
+						distance = li.Eq(2).Text()
+						lamp = li.Eq(3).Text()
+					} else {
+						lamp = li.Eq(2).Text()
+					}
+
 					img, _ := item.Find(".gallery-image img").First().Attr("src")
 
 					var colors []string
@@ -57,14 +66,15 @@ func (k *KutekSiteParser) Run() {
 					})
 
 					k.items[len(k.items)] = &Item{
-						Url:     url,
-						Name:    name,
-						Article: article,
-						Height:  height,
-						Width:   width,
-						Lamp:    lamp,
-						Img:     img,
-						Colors:  colors,
+						Url:      url,
+						Name:     name,
+						Article:  article,
+						Height:   height,
+						Width:    width,
+						Distance: distance,
+						Lamp:     lamp,
+						Img:      img,
+						Colors:   colors,
 					}
 
 					fmt.Println(k.items[len(k.items)-1])

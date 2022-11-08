@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-var _Cells = [8]string{"A", "B", "C", "D", "E", "F", "G", "H"}
+var _Cells = [12]string{"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"}
 
 type Excel struct {
 	name       string
@@ -26,12 +26,15 @@ func (e *Excel) generate(items map[int]*parser.Item) {
 	// set headers
 	e.setHeader(sheet, []string{
 		"Name",
+		"Type",
 		"Article",
 		"Img",
 		"Width",
 		"Height",
+		"Distance",
 		"Lamp",
 		"Colors",
+		"ColorShades",
 		"Url",
 	})
 
@@ -39,12 +42,15 @@ func (e *Excel) generate(items map[int]*parser.Item) {
 	for _, item := range items {
 		e.setRow(sheet, []string{
 			item.Name,
+			item.Type,
 			item.Article,
 			item.Img,
 			item.Width,
 			item.Height,
+			item.Distance,
 			item.Lamp,
 			strings.Join(item.Colors, ", "),
+			strings.Join(item.ColorShades, ", "),
 			item.Url,
 		})
 	}
@@ -66,7 +72,7 @@ func (e *Excel) setHeader(sheet string, cells []string) {
 
 func (e *Excel) setRow(sheet string, cells []string) {
 	for i, value := range cells {
-		e.file.SetCellValue(sheet, e.getChar(i), value)
+		e.file.SetCellValue(sheet, e.getChar(i), strings.TrimSpace(value))
 	}
 	e.nextRow()
 }

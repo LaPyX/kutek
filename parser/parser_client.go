@@ -10,22 +10,26 @@ import (
 	"log"
 	"net/http"
 	"strings"
+	"time"
 )
 
 const (
 	SiteKutekUrl     = "https://kutek.com.pl/kolekcje/"
-	SiteKutekMoodUrl = "http://kutekmood.com/"
+	SiteKutekMoodUrl = "http://www.kutekmood.com"
 )
 
 type Item struct {
-	Url     string
-	Name    string
-	Article string
-	Width   string
-	Height  string
-	Lamp    string
-	Colors  []string
-	Img     string
+	Url         string
+	Name        string
+	Article     string
+	Width       string
+	Height      string
+	Distance    string
+	Lamp        string
+	Colors      []string
+	Img         string
+	Type        string
+	ColorShades []string
 }
 
 type SiteParser interface {
@@ -35,10 +39,15 @@ type SiteParser interface {
 }
 
 type SiteClient struct {
-	client *http.Client
+	client   *http.Client
+	interval time.Duration
 }
 
 func (s *SiteClient) request(uri string) []byte {
+	if s.interval > 0 {
+		time.Sleep(s.interval)
+	}
+
 	method := "GET"
 
 	payload := &bytes.Buffer{}
@@ -81,6 +90,11 @@ func (s *SiteClient) queryDoc(data string) *goquery.Document {
 	return doc
 }
 
+func (s *SiteClient) SetInterval(interval time.Duration) *SiteClient {
+	s.interval = interval
+	return s
+}
+
 func newClient() *SiteClient {
 	return &SiteClient{
 		client: &http.Client{
@@ -107,7 +121,7 @@ func GetParser(url string) SiteParser {
 	case SiteKutekMoodUrl:
 		return &KutekMoodSiteParser{
 			url:    url,
-			client: newClient(),
+			client: newClient().SetInterval(100 * time.Millisecond),
 			items:  make(map[int]*Item),
 		}
 	}
