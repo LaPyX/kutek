@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/xuri/excelize/v2"
+	"kutek/parser"
 	"strconv"
 	"strings"
 )
@@ -15,7 +16,7 @@ type Excel struct {
 	currentRow int
 }
 
-func (e *Excel) generate(items map[int]*Item) {
+func (e *Excel) generate(items map[int]*parser.Item) {
 	sheet := "Sheet1"
 
 	e.file = excelize.NewFile()
@@ -37,14 +38,14 @@ func (e *Excel) generate(items map[int]*Item) {
 	// Set value of a cell.
 	for _, item := range items {
 		e.setRow(sheet, []string{
-			item.name,
-			item.article,
-			item.img,
-			item.width,
-			item.height,
-			item.lamp,
-			strings.Join(item.colors, ", "),
-			item.url,
+			item.Name,
+			item.Article,
+			item.Img,
+			item.Width,
+			item.Height,
+			item.Lamp,
+			strings.Join(item.Colors, ", "),
+			item.Url,
 		})
 	}
 	// Save spreadsheet by the given path.
