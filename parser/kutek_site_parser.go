@@ -55,7 +55,7 @@ func (k *KutekSiteParser) Run() {
 					desc := query.Find(".product-descritpion")
 
 					name := desc.Find("h1").First().Text()
-					article := desc.Find("h2").First().Text()
+					article := strings.ReplaceAll(desc.Find("h2").First().Text(), " ", "")
 					li := desc.Find("ul > li")
 					height := li.Eq(0).Text()
 					width := li.Eq(1).Text()
@@ -90,7 +90,7 @@ func (k *KutekSiteParser) Run() {
 					item := Item{
 						Url:         url,
 						Name:        name,
-						Article:     strings.ReplaceAll(article, " ", ""),
+						Article:     article,
 						Height:      height,
 						Width:       width,
 						Distance:    distance,
