@@ -32,10 +32,12 @@ type Item struct {
 	ColorShades []string
 }
 
+type Items map[string]*Item
+
 type SiteParser interface {
 	Run()
-	GetItems() map[int]*Item
-	SetItems(map[int]*Item)
+	GetItems() Items
+	SetItems(Items)
 }
 
 type SiteClient struct {
@@ -116,13 +118,13 @@ func GetParser(url string) SiteParser {
 		return &KutekSiteParser{
 			url:    url,
 			client: newClient(),
-			items:  make(map[int]*Item),
+			items:  make(Items),
 		}
 	case SiteKutekMoodUrl:
 		return &KutekMoodSiteParser{
 			url:    url,
 			client: newClient().SetInterval(100 * time.Millisecond),
-			items:  make(map[int]*Item),
+			items:  make(Items),
 		}
 	}
 

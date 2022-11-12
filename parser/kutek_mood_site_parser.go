@@ -10,14 +10,14 @@ import (
 type KutekMoodSiteParser struct {
 	client *SiteClient
 	url    string
-	items  map[int]*Item
+	items  Items
 }
 
-func (k *KutekMoodSiteParser) SetItems(items map[int]*Item) {
+func (k *KutekMoodSiteParser) SetItems(items Items) {
 	k.items = items
 }
 
-func (k *KutekMoodSiteParser) GetItems() map[int]*Item {
+func (k *KutekMoodSiteParser) GetItems() Items {
 	return k.items
 }
 
@@ -70,7 +70,7 @@ func (k *KutekMoodSiteParser) Run() {
 						colorShades = append(colorShades, strings.TrimSpace(t.Text()))
 					})
 
-					k.items[len(k.items)] = &Item{
+					k.items[name] = &Item{
 						Url:         url,
 						Name:        name,
 						Article:     name,
@@ -84,7 +84,7 @@ func (k *KutekMoodSiteParser) Run() {
 						ColorShades: colorShades,
 					}
 
-					fmt.Println(k.items[len(k.items)-1])
+					fmt.Println(k.items[name])
 				}
 
 				return true

@@ -16,7 +16,7 @@ type Excel struct {
 	currentRow int
 }
 
-func (e *Excel) generate(items map[int]*parser.Item) {
+func (e *Excel) generate(items parser.Items) {
 	sheet := "Sheet1"
 
 	e.file = excelize.NewFile()
